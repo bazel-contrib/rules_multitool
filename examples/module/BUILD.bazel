@@ -18,6 +18,7 @@ sh_test(
         "$(location @multitool//tools/target-determinator:cwd)",
     ],
     data = ["@multitool//tools/target-determinator:cwd"],
+    env = {"BUILD_WORKING_DIRECTORY": "."},
 )
 
 sh_test(
@@ -27,6 +28,7 @@ sh_test(
         "$(location @multitool//tools/target-determinator:workspace_root)",
     ],
     data = ["@multitool//tools/target-determinator:workspace_root"],
+    env = {"BUILD_WORKSPACE_DIRECTORY": "."},
 )
 
 add_dummy_file(
@@ -46,4 +48,5 @@ sh_test(
         "$(location :add_dummy_file_cwd)",
     ],
     data = [":add_dummy_file_cwd"],
+    env = {"BUILD_WORKING_DIRECTORY": "."},
 )
