@@ -36,4 +36,7 @@ def run_in(ctx, env_var):
             "{{env_var}}": env_var,
         },
     )
-    return [DefaultInfo(executable = output, runfiles = ctx.attr.tool[DefaultInfo].default_runfiles)]
+
+    runfiles = ctx.runfiles(ctx.files.tool)
+    runfiles = runfiles.merge(ctx.attr.tool[DefaultInfo].default_runfiles)
+    return [DefaultInfo(executable = output, runfiles = runfiles)]
