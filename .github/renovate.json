@@ -1,15 +1,25 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [":semanticCommitsDisabled"],
-  "enabledManagers": ["github-actions"],
+  "extends": [
+    ":semanticCommitsDisabled"
+  ],
+  "enabledManagers": [
+    "github-actions"
+  ],
   "timezone": "America/New_York",
-  "schedule": ["every weekday after 9am before 5pm"],
+  "schedule": [
+    "every weekday after 9am before 5pm"
+  ],
   "branchConcurrentLimit": 10,
-  "labels": ["automerge"],
+  "labels": [
+    "automerge"
+  ],
   "dependencyDashboard": true,
   "packageRules": [
     {
-      "matchFiles": ["MODULE.bazel"],
+      "matchFileNames": [
+        "MODULE.bazel"
+      ],
       "enabled": false
     }
   ]
