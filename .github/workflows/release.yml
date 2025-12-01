@@ -6,9 +6,23 @@ on:
 
 jobs:
   release:
-    uses: bazel-contrib/.github/.github/workflows/release_ruleset.yaml@v7
+    uses: bazel-contrib/.github/.github/workflows/release_ruleset.yaml@v7.2.3
     permissions:
+      id-token: write
       contents: write
+      attestations: write
     with:
       release_files: rules_multitool-*.tar.gz
       prerelease: false
+
+  # publish to BCR
+  publish:
+    needs: release
+    uses: ./.github/workflows/publish-to-bcr.yml
+    permissions:
+      id-token: write
+      contents: write
+      attestations: write
+    with:
+      tag_name: ${{ github.ref_name }}
+    secrets: inherit
