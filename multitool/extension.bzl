@@ -26,10 +26,8 @@ def _extension(module_ctx):
             else:
                 lockfiles[h.hub_name] = [h.lockfile]
 
-            if not module_ctx.is_dev_dependency(h):
-                root_module_direct_deps[h.hub_name] = 1
-            else:
-                root_module_direct_dev_deps[h.hub_name] = 1
+            if mod.is_root:
+                (root_module_direct_dev_deps if module_ctx.is_dev_dependency(h) else root_module_direct_deps)[h.hub_name] = 1
 
     # ensure _DEFAULT_HUB_NAME is present in non-dev and dev deps
     # when non-dev and dev deps are non-empty.
