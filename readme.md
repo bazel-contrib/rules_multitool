@@ -18,7 +18,7 @@ Define a [lockfile](lockfile.schema.json) that references the tools to load:
         "url": "https://...",
         "sha256": "sha256 of the file",
         "os": "linux|macos|windows",
-        "cpu": "x86_64|arm64"
+        "cpu": "x86_64|arm64|riscv64"
       }
     ]
   }
