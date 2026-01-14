@@ -1,3 +1,4 @@
+load("@bazel_skylib//rules:build_test.bzl", "build_test")
 load("@rules_multitool//multitool:cwd.bzl", "cwd")
 load("@rules_shell//shell:sh_test.bzl", "sh_test")
 load("//:add_dummy_file.bzl", "add_dummy_file")
@@ -49,4 +50,17 @@ sh_test(
     ],
     data = [":add_dummy_file_cwd"],
     env = {"BUILD_WORKING_DIRECTORY": "."},
+)
+
+genrule(
+    name = "run_gh_alias_import",
+    srcs = ["test_gh_aliases.yaml"],
+    outs = ["run_gh_alias_import.out"],
+    cmd = "$(location @multitool//tools/gh:cwd) alias import test_gh_aliases.yaml && touch run_gh_alias_import.out",
+    tools = ["@multitool//tools/gh:cwd"],
+)
+
+build_test(
+    name = "run_gh_alias_import_test",
+    targets = [":run_gh_alias_import.out"],
 )
