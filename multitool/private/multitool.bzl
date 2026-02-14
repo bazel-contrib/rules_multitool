@@ -69,6 +69,8 @@ def _extension(os):
     return ""
 
 def _download_extract_tool(rctx, tool_name, binary):
+    reproducible = True
+
     target_filename = "{os}_{cpu}_executable{ext}".format(
         cpu = binary["cpu"],
         os = binary["os"],
@@ -116,12 +118,15 @@ def _download_extract_tool(rctx, tool_name, binary):
             ))
         rctx.symlink(archive_file, target_executable)
     elif binary["kind"] == "pkg":
+        # Binaries of kind "pkg" behave differently depending on the presence of pkgutil.
+        reproducible = False
+
         # Check if pkgutil is on the path, and if not fail silently.
         # repository rules execute irrespective of platform/OS, so this
         # check is required for `pkg_archive` to not fail on Linux.
         pkgutil_cmd = rctx.which("pkgutil")
         if not pkgutil_cmd:
-            return
+            return reproducible
 
         archive_path = "tools/{tool_name}/{os}_{cpu}_pkg".format(
             tool_name = tool_name,
@@ -155,10 +160,18 @@ def _download_extract_tool(rctx, tool_name, binary):
 
     templates.tool_tool(rctx, tool_name, "BUILD.bazel", {"{target_filename}": target_filename})
 
+    return reproducible
+
 def _tool_repo_impl(rctx):
-    _download_extract_tool(rctx, rctx.attr.tool_name, json.decode(rctx.attr.binary))
+    reproducible = _download_extract_tool(rctx, rctx.attr.tool_name, json.decode(rctx.attr.binary))
     templates.tool(rctx, "tools/BUILD.bazel")
     templates.tool(rctx, "BUILD.bazel")
+
+    # Bazel <8.3.0 lacks rctx.repo_metadata
+    if not hasattr(rctx, "repo_metadata"):
+        return None
+
+    return rctx.repo_metadata(reproducible = reproducible)
 
 tool_repo = repository_rule(
     attrs = {
@@ -210,6 +223,12 @@ def _multitool_hub_impl(rctx):
 
     # workspace compat & list of all tools
     templates.hub(rctx, "tools.bzl", templates.tools_substitutions(rctx.attr.name, tools))
+
+    # Bazel <8.3.0 lacks rctx.repo_metadata
+    if not hasattr(rctx, "repo_metadata"):
+        return None
+
+    return rctx.repo_metadata(reproducible = True)
 
 _multitool_hub = repository_rule(
     attrs = {
