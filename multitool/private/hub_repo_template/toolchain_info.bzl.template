@@ -13,7 +13,7 @@ def _toolchain_info_impl(ctx):
 toolchain_info = rule(
     attrs = dict(
         executable = attr.label(allow_single_file = True),
-        cpu = attr.string(mandatory = True, values = ["arm64", "x86_64"]),
+        cpu = attr.string(mandatory = True, values = ["arm64", "x86_64", "riscv64"]),
         os = attr.string(mandatory = True, values = ["linux", "macos", "windows"]),
         ext = attr.string(mandatory = True, values = ["", ".exe"]),
     ),
