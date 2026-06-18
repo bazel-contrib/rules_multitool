@@ -23,7 +23,7 @@ jobs:
     env:
       USE_BAZEL_VERSION: ${{ matrix.version }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: bazel-contrib/setup-bazel@0.16.0
         with:
           repository-cache: true
@@ -38,6 +38,6 @@ jobs:
   integration-tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - working-directory: examples/workspace
         run: ./minimal_download_test.sh
