@@ -71,12 +71,9 @@ It's possible to define multiple multitool hubs to group related tools together.
 ```python
 multitool.hub(hub_name = "alt_hub", lockfile = "//:other_tools.lock.json")
 use_repo(multitool, "alt_hub")
-
-# register the tools from this hub
-register_toolchains("@alt_hub//toolchains:all")
 ```
 
-These alternate hubs also combine lockfiles according to the hub_name and follow the same merging rules as the default hub.
+These alternate hubs also combine lockfiles according to the hub_name and follow the same merging rules as the default hub. rules_multitool registers the toolchains of all hubs.
 
 ### Workspace Usage
 
