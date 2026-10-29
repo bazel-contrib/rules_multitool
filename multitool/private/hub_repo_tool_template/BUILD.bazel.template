@@ -6,7 +6,11 @@ load(":tool.bzl", "tool")
 
 toolchain_type(
     name = "toolchain_type",
-    visibility = ["//:__subpackages__"],
+    visibility = [
+        "//:__subpackages__",
+        # The default hub also declares the toolchains of all other hubs.
+        "@multitool//toolchains:__subpackages__",
+    ],
 )
 
 tool(

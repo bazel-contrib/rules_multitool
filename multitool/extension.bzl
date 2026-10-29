@@ -36,11 +36,15 @@ def _extension(module_ctx):
     if len(root_module_direct_dev_deps) > 0:
         root_module_direct_dev_deps[_DEFAULT_HUB_NAME] = 1
 
+    # rules_multitool only registers the toolchains of the default hub, so it
+    # also declares the toolchains of all other hubs.
+    other_hubs = [name for name in lockfiles if name != _DEFAULT_HUB_NAME]
     for lockfile_name, lockfile_list in lockfiles.items():
         _hub(
             name = lockfile_name,
             lockfiles = lockfile_list,
             module_ctx = module_ctx,
+            other_hubs = other_hubs if lockfile_name == _DEFAULT_HUB_NAME else [],
         )
 
     return module_ctx.extension_metadata(
