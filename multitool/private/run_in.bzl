@@ -1,4 +1,4 @@
-"run_in provides a shared implementation for cwd and workspace_root execution"
+"run_in provides a shared implementation for workspace_root execution"
 
 run_in_attrs = {
     "tool": attr.label(mandatory = True, executable = True, cfg = "exec"),
