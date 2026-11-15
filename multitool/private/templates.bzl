@@ -40,6 +40,15 @@ def _render_hub(rctx, filename, substitutions = None):
         substitutions = substitutions or {},
     )
 
+def _render_hub_toolchains(rctx, path, defs):
+    rctx.template(
+        path,
+        Label(_HUB_TEMPLATE.format(filename = "toolchains/BUILD.bazel")),
+        substitutions = {
+            "{defs}": defs,
+        },
+    )
+
 def _render_hub_tool(rctx, tool_name, filename, substitutions = None):
     rctx.template(
         "tools/{tool_name}/{filename}".format(tool_name = tool_name, filename = filename),
@@ -98,6 +107,7 @@ def _tools_subs(hub_name, tools):
 
 templates = struct(
     hub = _render_hub,
+    hub_toolchains = _render_hub_toolchains,
     hub_tool = _render_hub_tool,
     tool = _render_tool,
     tool_tool = _render_tool_tool,

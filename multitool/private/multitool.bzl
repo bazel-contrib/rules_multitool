@@ -21,6 +21,9 @@ Multitool takes as input a JSON lockfile and emits the following repos:
      The structure of this repo is:
        toolchains/
          BUILD.bazel      (a single file containing all declared toolchains for easy registration)
+         defs.bzl         (the macro that declares these toolchains)
+         [other-hub]/
+           BUILD.bazel    (in the default hub only: declares the toolchains of another hub)
        tools/
          [tool-name]/
            BUILD.bazel    (declares the toolchain_type and the executable tool target)
@@ -216,10 +219,17 @@ def _multitool_hub_impl(rctx):
         "{hub_name}": rctx.attr.name,
     })
     templates.hub(rctx, "tools/BUILD.bazel")
-    templates.hub(rctx, "toolchains/BUILD.bazel", {
+    templates.hub(rctx, "toolchains/defs.bzl", {
         "{loads}": "\n".join(loads),
-        "{defines}": "\n".join(defines),
+        "{defines}": "\n    ".join(defines),
     })
+    templates.hub_toolchains(rctx, "toolchains/BUILD.bazel", "//toolchains:defs.bzl")
+    for hub_name in rctx.attr.other_hubs:
+        templates.hub_toolchains(
+            rctx,
+            "toolchains/{hub_name}/BUILD.bazel".format(hub_name = hub_name),
+            "@{hub_name}//toolchains:defs.bzl".format(hub_name = hub_name),
+        )
 
     # workspace compat & list of all tools
     templates.hub(rctx, "tools.bzl", templates.tools_substitutions(rctx.attr.name, tools))
@@ -233,11 +243,12 @@ def _multitool_hub_impl(rctx):
 _multitool_hub = repository_rule(
     attrs = {
         "lockfiles": attr.label_list(mandatory = True, allow_files = True),
+        "other_hubs": attr.string_list(),
     },
     implementation = _multitool_hub_impl,
 )
 
-def bzlmod_hub(name, lockfiles, module_ctx):
+def bzlmod_hub(name, lockfiles, module_ctx, other_hubs = []):
     """
     Creates a multitool hub for bzlmod.
 
@@ -245,6 +256,7 @@ def bzlmod_hub(name, lockfiles, module_ctx):
        name: name of the hub
        lockfiles: a list of lockfile labels containing multitool lockfiles
        module_ctx: a valid module_ctx instance
+       other_hubs: names of hubs whose toolchains this hub also declares
     """
 
     tools = lockfile.load_defs(module_ctx, lockfiles)
@@ -261,7 +273,7 @@ def bzlmod_hub(name, lockfiles, module_ctx):
                 binary = json.encode(binary),
             )
 
-    _multitool_hub(name = name, lockfiles = lockfiles)
+    _multitool_hub(name = name, lockfiles = lockfiles, other_hubs = other_hubs)
 
 def workspace_hub(name, lockfiles):
     """

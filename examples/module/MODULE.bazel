@@ -23,6 +23,3 @@ multitool.hub(
     lockfile = "//:multitool.lock.json",
 )
 use_repo(multitool, "alt", "multitool")
-
-# required to use alternate hub's tools
-register_toolchains("@alt//toolchains:all")

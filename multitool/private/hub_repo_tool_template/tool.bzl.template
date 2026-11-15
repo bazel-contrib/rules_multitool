@@ -2,7 +2,7 @@
 
 load("//:toolchain_info.bzl", "declare_toolchain")
 
-_TOOLCHAIN_TYPE = "//tools/{name}:toolchain_type"
+_TOOLCHAIN_TYPE = Label("//tools/{name}:toolchain_type")
 
 def _tool_impl(ctx):
     toolchain = ctx.toolchains[_TOOLCHAIN_TYPE]
