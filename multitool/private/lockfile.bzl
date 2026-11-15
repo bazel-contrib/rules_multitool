@@ -38,7 +38,7 @@ def _load(ctx, lockfiles):
                 ),
             )
             _check(
-                binary["cpu"] in ["x86_64", "arm64"],
+                binary["cpu"] in ["x86_64", "arm64", "riscv64"],
                 "{tool_name}: Unknown cpu '{cpu}'".format(
                     tool_name = tool_name,
                     cpu = binary["cpu"],

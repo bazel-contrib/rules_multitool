@@ -7,7 +7,7 @@
       "enum": ["macos", "linux", "windows"]
     },
     "supported_cpu": {
-      "enum": ["x86_64", "arm64"]
+      "enum": ["x86_64", "arm64", "riscv64"]
     },
     "file_type": {
       "type": "object",

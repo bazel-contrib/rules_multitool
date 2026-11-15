@@ -11,6 +11,7 @@ _TOOL_TOOL_TEMPLATE = "//multitool/private:tool_repo_tool_template/{filename}.te
 # map from HOST_CONSTRAINTS to supported_os and supported_cpu from lockfile.schema.json
 _HOST_CONSTRAINTS_MAPPING = {
     "@platforms//cpu:aarch64": "arm64",
+    "@platforms//cpu:riscv64": "riscv64",
     "@platforms//cpu:x86_64": "x86_64",
     "@platforms//os:osx": "macos",
     "@platforms//os:linux": "linux",
