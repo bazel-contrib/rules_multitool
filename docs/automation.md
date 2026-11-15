@@ -40,7 +40,7 @@ jobs:
           token: ${{ steps.app-token.outputs.token }}
 
       - name: Find Updates and Render Lockfile
-        run: bazel run @multitool//tools/multitool:cwd -- --lockfile "$LOCKFILE" update
+        run: bazel run --run_in_cwd @multitool//tools/multitool -- --lockfile "$LOCKFILE" update
 
       - name: Commit Changes
         env:
