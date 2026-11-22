@@ -87,7 +87,7 @@ It's possible to workaround this:
 - To run a tool in the current working directory, use the convenience target `@multitool//tools/[tool-name]:cwd`.
 - To run a tool in the Bazel module or workspace root, use the convenience target `@multitool//tools/[tool-name]:workspace_root`.
 
-Alternatively, consider using https://registry.build/github/buildbuddy-io/bazel_env.bzl to put tools on the `PATH`.
+Alternatively, consider using https://registry.bazel.build/modules/bazel_env.bzl/ to put tools on the `PATH`.
 
 ### Keeping Tools Up-to-Date
 
